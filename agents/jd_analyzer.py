@@ -1,20 +1,18 @@
-from google.adk.agents import LlmAgent
+from google.adk.agents import Agent
 
-jd_analyzer_agent = LlmAgent(
+jd_analyzer = Agent(
     name="jd_analyzer",
-    model="gemini-2.0-flash",
-    instruction=""" You are an expert technical recruiter.
+    model="gemini-2.0-flash-exp",
+    description="Analyzes a job description and extracts key information.",
+    instruction="""
+You are a Job Description Analyzer.
 
-                    Your job is to analyze a Job Description.
+When given a job description:
 
-                    Extract:
-                    - Job Title
-                    - Required Skills
-                    - Preferred Skills
-                    - Experience Required
-                    - Education Required
-                    - Job Responsibilities
-
-                    Return the information in a clean, structured format.
-                    """,
+1. Identify the job title.
+2. Extract all required technical skills.
+3. Extract preferred skills.
+4. Summarize the role in 3-4 sentences.
+5. Return the response in clean Markdown.
+""",
 )
