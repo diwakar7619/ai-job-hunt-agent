@@ -1,5 +1,6 @@
 # ui/app.py
 import streamlit as st
+import pdfplumber
 from agents.agent import agent
 
 st.set_page_config(page_title="AI Job Hunt Agent", layout="wide")
@@ -18,7 +19,14 @@ col1, col2 = st.columns(2)
 with col1:
     jd_input = st.text_area("Paste Job Description", height=250)
 with col2:
-    resume_input = st.text_area("Paste Resume Text", height=250)
+    resume_file = st.file_uploader("Upload Resume (PDF)", type=["pdf"])
+    resume_input = ""
+    if resume_file:
+        with pdfplumber.open(resume_file) as pdf:
+            resume_input = "\n".join(
+                page.extract_text() for page in pdf.pages if page.extract_text()
+            )
+        st.success("Resume parsed successfully!")
 
 # 3. Execution
 if st.button("Run Full Analysis"):
@@ -37,7 +45,7 @@ if st.button("Run Full Analysis"):
             st.success("Sequence Complete")
             st.write(result)
     else:
-        st.warning("Please provide both a JD and a Resume.")
+        st.warning("Please provide a JD and upload a PDF Resume.")
 
 # 4. Session Memory Sidebar
 st.sidebar.title("Session Memory")
