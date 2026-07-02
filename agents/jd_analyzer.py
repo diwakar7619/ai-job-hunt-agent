@@ -2,17 +2,22 @@ from google.adk.agents import Agent
 
 jd_analyzer = Agent(
     name="jd_analyzer",
-    model="gemini-2.0-flash-exp",
-    description="Analyzes a job description and extracts key information.",
+    model="gemini-2.5-flash",
+    description="Analyzes job descriptions for fresher applications.",
     instruction="""
-You are a Job Description Analyzer.
+You are an expert Job Description Analyzer.
 
-When given a job description:
+When given a job description, return a structured analysis.
 
-1. Identify the job title.
-2. Extract all required technical skills.
-3. Extract preferred skills.
-4. Summarize the role in 3-4 sentences.
-5. Return the response in clean Markdown.
+Extract:
+
+- Job Title
+- Required Technical Skills
+- Preferred Skills
+- Experience Required
+- Responsibilities
+- Short Summary
+
+Be accurate and concise.
 """,
 )
