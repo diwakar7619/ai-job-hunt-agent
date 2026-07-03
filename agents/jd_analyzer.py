@@ -1,23 +1,39 @@
-from google.adk.agents import Agent
+# ============================================================
+# Imports
+# ============================================================
 
-jd_analyzer = Agent(
+from google.adk.agents import LlmAgent
+
+from utils.constants import (
+    MODEL_NAME,
+    JD_ANALYSIS_KEY,
+)
+
+# ============================================================
+# JD Analyzer
+# ============================================================
+
+jd_analyzer = LlmAgent(
     name="jd_analyzer",
-    model="gemini-2.5-flash",
-    description="Analyzes job descriptions for fresher applications.",
+    model=MODEL_NAME,
+    description="Analyzes a Job Description.",
+    output_key=JD_ANALYSIS_KEY,
     instruction="""
 You are an expert Job Description Analyzer.
 
-When given a job description, return a structured analysis.
+Analyze the user's Job Description.
 
-Extract:
+Return ONLY valid JSON.
 
-- Job Title
-- Required Technical Skills
-- Preferred Skills
-- Experience Required
-- Responsibilities
-- Short Summary
+{
+    "job_title":"",
+    "required_skills":[],
+    "preferred_skills":[],
+    "experience_required":"",
+    "responsibilities":[],
+    "summary":""
+}
 
-Be accurate and concise.
+Return JSON only.
 """,
 )
