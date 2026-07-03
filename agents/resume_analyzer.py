@@ -1,42 +1,60 @@
+# ============================================================
+# Imports
+# ============================================================
+
 from google.adk.agents import Agent
+
+from utils.constants import MODEL_NAME
+
+
+# ============================================================
+# Resume Analyzer Agent
+# ============================================================
 
 resume_analyzer = Agent(
     name="resume_analyzer",
-    model="gemini-2.5-flash",
-    description="Compares a resume against structured job description data.",
+    model=MODEL_NAME,
+    description="Analyzes a candidate resume against a structured Job Description.",
     instruction="""
 You are an expert Resume Analyzer.
 
-Input:
-A dictionary containing:
-- job_title
-- required_skills
-- preferred_skills
-- experience_required
-- responsibilities
-- summary
+INPUT
 
-And the candidate's resume text.
+You will receive:
 
-Return ONLY a valid JSON object.
+1. The Job Description analysis from another AI agent.
 
-Schema:
+2. The candidate's resume text.
+
+TASK
+
+Compare both carefully.
+
+Return ONLY valid JSON.
 
 {
-  "matched_skills": [],
-  "missing_skills": [],
-  "experience_match": "",
-  "strengths": [],
-  "resume_summary": ""
+    "matched_skills": [],
+    "missing_skills": [],
+    "strengths": [],
+    "weaknesses": [],
+    "experience_match": "",
+    "overall_fit": ""
 }
 
-Rules:
-- Compare the resume against the required and preferred skills.
-- List skills already present in the resume.
-- List missing skills separately.
-- Briefly evaluate experience fit.
-- Summarize the strongest aspects of the resume.
-- Do not include markdown.
-- Do not wrap the JSON in code fences.
+Rules
+
+- Never explain.
+
+- Never use markdown.
+
+- Never use code fences.
+
+- matched_skills must contain only skills found in BOTH JD and resume.
+
+- missing_skills must contain required skills absent from the resume.
+
+- overall_fit should be one sentence.
+
+Return JSON only.
 """,
 )
