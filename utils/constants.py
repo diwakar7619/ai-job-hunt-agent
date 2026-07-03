@@ -2,8 +2,18 @@
 # Application Constants
 # ============================================================
 
-MODEL_NAME = "gemini-2.5-flash"
-
 APP_NAME = "AI Fresher Job Hunt Agent"
 
-SUPPORTED_FILE_TYPES = ["pdf"]
+MODEL_NAME = "gemini-2.5-flash"
+
+# ============================================================
+# Session State Keys
+# ============================================================
+
+JD_ANALYSIS_KEY = "jd_analysis"
+
+RESUME_ANALYSIS_KEY = "resume_analysis"
+
+RECOMMENDATION_KEY = "recommendation_analysis"
+
+OUTREACH_KEY = "outreach_output"
