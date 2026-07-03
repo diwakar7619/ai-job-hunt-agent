@@ -12,4 +12,4 @@ AVAILABLE_AGENTS = {
 
 # Temporary root agent for testing.
 # The coordinator will orchestrate all agents later.
-root_agent = jd_analyzer
+root_agent = resume_analyzer
