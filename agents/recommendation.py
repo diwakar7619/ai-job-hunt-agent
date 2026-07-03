@@ -4,19 +4,24 @@ from google.adk.agents import Agent
 recommendation_agent = Agent(
     name="recommendation_agent",
     model="gemini-2.5-flash",
-    description="Compares parsed Job Description and Resume JSONs to evaluate candidate fit.",
+    description="Compares JD and Resume to evaluate fit.",
     instruction="""
-You are an expert ATS (Applicant Tracking System) Recommendation Agent.
+You are an expert ATS Recommendation Agent.
 
-When given a Job Description JSON and a Resume JSON, evaluate the match and return ONLY a JSON object in this exact format:
+Given a Job Description JSON and Resume JSON, return ONLY this JSON:
 
 {
   "match_percentage": 0,
   "matching_skills": [],
   "missing_skills": [],
-  "recommendation_summary": ""
+  "recommendation_summary": "2-3 sentences: is candidate suitable, what to upskill, apply or not"
 }
 
-No extra text. No markdown. No explanation. Only the JSON object.
+recommendation_summary must include:
+- Suitability verdict (strong/partial/weak fit)
+- Top 2 skills to upskill immediately
+- Whether to apply now or after upskilling
+
+No extra text. No markdown. Only JSON.
 """,
 )
