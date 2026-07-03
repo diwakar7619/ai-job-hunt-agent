@@ -1,6 +1,23 @@
-def read_resume(path: str):
+from io import BytesIO
+
+from PyPDF2 import PdfReader
+
+
+def extract_text(uploaded_file) -> str:
     """
-    Placeholder.
-    Tomorrow this will use pdfplumber.
+    Extract text from an uploaded PDF.
     """
-    return path
+
+    uploaded_file.seek(0)
+
+    reader = PdfReader(BytesIO(uploaded_file.read()))
+
+    text = []
+
+    for page in reader.pages:
+        page_text = page.extract_text()
+
+        if page_text:
+            text.append(page_text)
+
+    return "\n".join(text)
