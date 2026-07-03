@@ -9,7 +9,6 @@ from agents.agent import (
     outreach_writer,
 )
 
-
 # ============================================================
 # Job Hunt Orchestrator
 # ============================================================
@@ -23,9 +22,9 @@ class JobHuntOrchestrator:
         self.recommendation_agent = recommendation_agent
         self.outreach_writer = outreach_writer
 
-    # --------------------------------------------------------
+    # ========================================================
     # Pipeline
-    # --------------------------------------------------------
+    # ========================================================
 
     def get_pipeline(self):
 
@@ -36,10 +35,25 @@ class JobHuntOrchestrator:
             self.outreach_writer,
         ]
 
-    # --------------------------------------------------------
-    # JD Analyzer
-    # --------------------------------------------------------
+    # ========================================================
+    # Execute Pipeline (Temporary)
+    # ========================================================
 
-    def get_jd_agent(self):
+    def run(self, job_description: str, resume_text: str):
+        """
+        Temporary pipeline.
 
-        return self.jd_analyzer
+        Right now this prepares the shared payload.
+
+        Next milestone:
+        Each ADK agent will enrich this dictionary.
+        """
+
+        results = {
+            "jd_analysis": {"job_description": job_description},
+            "resume_analysis": {"resume_text": resume_text},
+            "recommendation": {},
+            "outreach": {},
+        }
+
+        return results
