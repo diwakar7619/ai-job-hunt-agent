@@ -1,61 +1,47 @@
-# ============================================================
+"""
+File:
+    recommendation.py
+
+Purpose:
+    Defines the Recommendation Agent.
+
+Responsibilities:
+    - Analyze the Resume Analysis and Job Description Analysis.
+    - Recommend skills to learn.
+    - Suggest projects.
+    - Suggest resume improvements.
+    - Prepare interview focus areas.
+
+Dependencies:
+    - Google ADK
+    - prompts package
+    - utils.constants
+"""
+
+# ==========================================================
 # Imports
-# ============================================================
+# ==========================================================
 
 from google.adk.agents import LlmAgent
+
+from prompts import get_recommendation_prompt
 
 from utils.constants import (
     MODEL_NAME,
     RECOMMENDATION_KEY,
 )
 
-
-# ============================================================
+# ==========================================================
 # Recommendation Agent
-# ============================================================
+# ==========================================================
 
 recommendation_agent = LlmAgent(
     name="recommendation_agent",
     model=MODEL_NAME,
-    description="Provides personalized recommendations based on resume analysis.",
+    description=(
+        "Provides personalized career recommendations by comparing "
+        "the candidate's resume against the analyzed Job Description."
+    ),
+    instruction=get_recommendation_prompt(),
     output_key=RECOMMENDATION_KEY,
-    instruction="""
-You are an expert AI Career Coach.
-
-INPUT
-
-You will receive:
-
-1. Job Description Analysis
-
-2. Resume Analysis
-
-TASK
-
-Generate ONLY valid JSON.
-
-{
-    "priority_skills": [],
-    "learning_plan": [],
-    "resume_improvements": [],
-    "project_recommendations": [],
-    "interview_focus": []
-}
-
-Rules
-
-- Never explain.
-
-- Never use markdown.
-
-- Never use code fences.
-
-- Prioritize the missing skills.
-
-- Recommend practical projects.
-
-- Keep every recommendation concise.
-
-Return JSON only.
-""",
 )
