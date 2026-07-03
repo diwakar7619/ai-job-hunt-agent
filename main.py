@@ -1,25 +1,19 @@
-from dotenv import load_dotenv
+from coordinator.orchestrator import JobHuntOrchestrator
 
-load_dotenv()
 
-from agents.jd_analyzer import jd_analyzer
-from google.adk.runners import Runner
-from google.adk.sessions import InMemorySessionService
+def main():
+    orchestrator = JobHuntOrchestrator()
 
-APP_NAME = "job_hunt_agent"
-USER_ID = "pratham"
-SESSION_ID = "session_001"
+    print("AI Fresher Job Hunt Agent")
+    print("-" * 40)
 
-session_service = InMemorySessionService()
+    print("\nPipeline:")
 
-session_service.create_session(
-    app_name=APP_NAME,
-    user_id=USER_ID,
-    session_id=SESSION_ID,
-)
+    for agent in orchestrator.get_pipeline():
+        print(f"• {agent.name}")
 
-runner = Runner(
-    agent=jd_analyzer,
-    app_name=APP_NAME,
-    session_service=session_service,
-)
+    print("\nBackend initialized successfully.")
+
+
+if __name__ == "__main__":
+    main()
