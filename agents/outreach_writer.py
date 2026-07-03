@@ -1,36 +1,52 @@
-from google.adk.agents import Agent
+# ============================================================
+# Imports
+# ============================================================
 
-outreach_writer = Agent(
+from google.adk.agents import LlmAgent
+
+from utils.constants import (
+    MODEL_NAME,
+    OUTREACH_KEY,
+)
+
+
+# ============================================================
+# Outreach Writer Agent
+# ============================================================
+
+outreach_writer = LlmAgent(
     name="outreach_writer",
-    model="gemini-2.5-flash",
-    description="Generates a tailored cover letter for a fresher job application.",
+    model=MODEL_NAME,
+    description="Generates a personalized cover letter and application email.",
+    output_key=OUTREACH_KEY,
     instruction="""
-You are an expert technical recruiter and career coach.
+You are an expert technical recruiter.
+
+INPUT
 
 You will receive:
-1. Job Description JSON
-2. Resume Analysis JSON
-3. Recommendation JSON
 
-Generate ONLY a valid JSON object.
+1. Job Description Analysis
+2. Resume Analysis
+3. Recommendation Analysis
 
-Schema:
+TASK
+
+Generate ONLY valid JSON.
 
 {
-  "cover_letter": "",
-  "email_subject": "",
-  "email_body": ""
+    "cover_letter": "",
+    "email_subject": "",
+    "email_body": ""
 }
 
-Rules:
-- Write a professional, personalized cover letter for a fresher.
-- Highlight the candidate's strengths and relevant skills.
-- Acknowledge important missing skills positively without drawing unnecessary attention to them.
-- Keep the cover letter between 250 and 400 words.
-- Create a concise email subject.
-- Write a short, professional email body suitable for sending with the resume attached.
-- Return only valid JSON.
-- Do not include markdown.
-- Do not wrap the JSON in code fences.
+Rules
+
+- Return JSON only.
+- Do not use markdown.
+- Do not use code fences.
+- Cover letter should be around 250 words.
+- Email should be concise and professional.
+- Tailor everything to the job description and candidate profile.
 """,
 )

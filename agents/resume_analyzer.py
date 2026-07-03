@@ -2,19 +2,23 @@
 # Imports
 # ============================================================
 
-from google.adk.agents import Agent
-
-from utils.constants import MODEL_NAME
+from google.adk.agents import LlmAgent
+from utils.constants import (
+    MODEL_NAME,
+    RESUME_ANALYSIS_KEY,
+)
 
 
 # ============================================================
 # Resume Analyzer Agent
 # ============================================================
 
-resume_analyzer = Agent(
+
+resume_analyzer = LlmAgent(
     name="resume_analyzer",
     model=MODEL_NAME,
     description="Analyzes a candidate resume against a structured Job Description.",
+    output_key=RESUME_ANALYSIS_KEY,
     instruction="""
 You are an expert Resume Analyzer.
 

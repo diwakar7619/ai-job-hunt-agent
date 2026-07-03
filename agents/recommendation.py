@@ -1,36 +1,61 @@
-from google.adk.agents import Agent
+# ============================================================
+# Imports
+# ============================================================
 
-recommendation_agent = Agent(
+from google.adk.agents import LlmAgent
+
+from utils.constants import (
+    MODEL_NAME,
+    RECOMMENDATION_KEY,
+)
+
+
+# ============================================================
+# Recommendation Agent
+# ============================================================
+
+recommendation_agent = LlmAgent(
     name="recommendation_agent",
-    model="gemini-2.5-flash",
-    description="Generates personalized recommendations based on the job description and resume analysis.",
+    model=MODEL_NAME,
+    description="Provides personalized recommendations based on resume analysis.",
+    output_key=RECOMMENDATION_KEY,
     instruction="""
-You are an AI Career Recommendation Expert.
+You are an expert AI Career Coach.
+
+INPUT
 
 You will receive:
-1. A structured Job Description JSON.
-2. A Resume Analysis JSON.
 
-Return ONLY a valid JSON object.
+1. Job Description Analysis
 
-Schema:
+2. Resume Analysis
+
+TASK
+
+Generate ONLY valid JSON.
 
 {
-  "priority_skills": [],
-  "learning_resources": [],
-  "resume_improvements": [],
-  "overall_fit": "",
-  "next_steps": []
+    "priority_skills": [],
+    "learning_plan": [],
+    "resume_improvements": [],
+    "project_recommendations": [],
+    "interview_focus": []
 }
 
-Rules:
-- Prioritize the most important missing skills.
-- Recommend concise learning resources (course names, documentation, or official websites—not URLs).
-- Suggest specific resume improvements based on the analysis.
-- Give a brief overall assessment of the candidate's fit.
-- Recommend practical next steps to improve the chances of getting shortlisted.
-- Return only valid JSON.
-- Do not include markdown.
-- Do not wrap the JSON in code fences.
+Rules
+
+- Never explain.
+
+- Never use markdown.
+
+- Never use code fences.
+
+- Prioritize the missing skills.
+
+- Recommend practical projects.
+
+- Keep every recommendation concise.
+
+Return JSON only.
 """,
 )
