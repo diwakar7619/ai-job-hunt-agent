@@ -1,31 +1,74 @@
 """
 File:
-    validators.py
+    parser.py
 
 Purpose:
-    Validation utilities.
+    Safely parse LLM responses into Python dictionaries.
 
 Responsibilities:
-    - Validate user inputs
-    - Validate parsed JSON
+    - Remove markdown fences
+    - Extract JSON from noisy responses
+    - Handle malformed outputs gracefully
+    - Never crash the application
+
+Dependencies:
+    json
+    re
 """
 
-
-def validate_jd(job_description: str):
-
-    return bool(job_description.strip())
+import json
+import re
 
 
-def validate_resume(resume_text: str):
+def parse_json_safe(raw):
+    """
+    Safely parse an LLM response.
 
-    return bool(resume_text.strip())
+    Args:
+        raw: Raw response returned by the LLM.
 
+    Returns:
+        dict: Parsed JSON if successful, otherwise {"raw": original_response}.
+    """
 
-def validate_json(data):
+    if raw is None:
+        return {"raw": ""}
 
-    return isinstance(data, dict)
+    if isinstance(raw, dict):
+        return raw
 
+    if isinstance(raw, list):
+        return {"data": raw}
 
-def validate_pdf(text: str):
+    raw = str(raw).strip()
 
-    return len(text.strip()) > 50
+    # ---------------------------------------------------------
+    # Remove Markdown code fences (```json ... ```)
+    # ---------------------------------------------------------
+    raw = re.sub(r"^```(?:json)?", "", raw, flags=re.IGNORECASE).strip()
+    raw = re.sub(r"```$", "", raw).strip()
+
+    # ---------------------------------------------------------
+    # First attempt: parse the entire response as JSON
+    # ---------------------------------------------------------
+    try:
+        return json.loads(raw)
+    except Exception:
+        pass
+
+    # ---------------------------------------------------------
+    # Second attempt: extract the JSON object from surrounding text
+    # ---------------------------------------------------------
+    start = raw.find("{")
+    end = raw.rfind("}")
+
+    if start != -1 and end != -1 and end > start:
+        try:
+            return json.loads(raw[start : end + 1])
+        except Exception:
+            pass
+
+    # ---------------------------------------------------------
+    # Final fallback
+    # ---------------------------------------------------------
+    return {"raw": raw}
