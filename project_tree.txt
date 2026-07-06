@@ -1,5 +1,5 @@
 Folder PATH listing for volume New Volume
-Volume serial number is 00000092 A87B:FF00
+Volume serial number is 00000015 A87B:FF00
 D:.
 ¦   .env
 ¦   .env.example
@@ -7,11 +7,13 @@ D:.
 ¦   .python-version
 ¦   ai-job-hunt-agent.code-workspace
 ¦   app.py
+¦   combined.txt
 ¦   main.py
 ¦   project_tree.txt
 ¦   pyproject.toml
 ¦   README.md
 ¦   test_jd.py
+¦   test_security.py
 ¦   uv.lock
 ¦   workspace_export.txt
 ¦   
@@ -30,6 +32,7 @@ D:.
 ¦   +---Lib
 ¦   ¦   +---site-packages
 ¦   ¦       ¦   81d243bd2c585b0f4821__mypyc.cp313-win_amd64.pyd
+¦   ¦       ¦   nest_asyncio.py
 ¦   ¦       ¦   six.py
 ¦   ¦       ¦   typing_extensions.py
 ¦   ¦       ¦   _cffi_backend.cp313-win_amd64.pyd
@@ -6942,6 +6945,15 @@ D:.
 ¦   ¦       ¦   +---licenses
 ¦   ¦       ¦           LICENSE.md
 ¦   ¦       ¦           
+¦   ¦       +---nest_asyncio-1.6.0.dist-info
+¦   ¦       ¦       INSTALLER
+¦   ¦       ¦       LICENSE
+¦   ¦       ¦       METADATA
+¦   ¦       ¦       RECORD
+¦   ¦       ¦       REQUESTED
+¦   ¦       ¦       top_level.txt
+¦   ¦       ¦       WHEEL
+¦   ¦       ¦       
 ¦   ¦       +---numpy
 ¦   ¦       ¦   ¦   conftest.py
 ¦   ¦       ¦   ¦   dtypes.py
@@ -18532,6 +18544,7 @@ D:.
 ¦   ¦       ¦           __init__.cpython-313.pyc
 ¦   ¦       ¦           
 ¦   ¦       +---__pycache__
+¦   ¦               nest_asyncio.cpython-313.pyc
 ¦   ¦               six.cpython-313.pyc
 ¦   ¦               typing_extensions.cpython-313.pyc
 ¦   ¦               _virtualenv.cpython-313.pyc
@@ -18584,6 +18597,7 @@ D:.
 ¦   ¦   agent.py
 ¦   ¦   jd_analyzer.py
 ¦   ¦   outreach_writer.py
+¦   ¦   quality_checker.py
 ¦   ¦   recommendation.py
 ¦   ¦   resume_analyzer.py
 ¦   ¦   __init__.py
@@ -18595,10 +18609,20 @@ D:.
 ¦           agent.cpython-313.pyc
 ¦           jd_analyzer.cpython-313.pyc
 ¦           outreach_writer.cpython-313.pyc
+¦           quality_checker.cpython-313.pyc
 ¦           recommendation.cpython-313.pyc
 ¦           resume_analyzer.cpython-313.pyc
 ¦           __init__.cpython-313.pyc
 ¦           
++---assets
+¦       01-homepage.png
+¦       02-candidate-dashboard.png
+¦       03-agent-execution-timeline.png
+¦       04-job-description-analysis.png
+¦       05-resume-match-analysis.png
+¦       06-recommendations-engine.png
+¦       07-outreach-generator.png
+¦       
 +---coordinator
 ¦   ¦   orchestrator.py
 ¦   ¦   __init__.py
@@ -18610,6 +18634,7 @@ D:.
 +---prompts
 ¦   ¦   jd_prompt.py
 ¦   ¦   outreach_prompt.py
+¦   ¦   quality_prompt.py
 ¦   ¦   recommendation_prompt.py
 ¦   ¦   resume_prompt.py
 ¦   ¦   __init__.py
@@ -18617,6 +18642,7 @@ D:.
 ¦   +---__pycache__
 ¦           jd_prompt.cpython-313.pyc
 ¦           outreach_prompt.cpython-313.pyc
+¦           quality_prompt.cpython-313.pyc
 ¦           recommendation_prompt.cpython-313.pyc
 ¦           resume_prompt.cpython-313.pyc
 ¦           __init__.cpython-313.pyc
@@ -18656,6 +18682,7 @@ D:.
 ¦           logger.cpython-313.pyc
 ¦           parser.cpython-313.pyc
 ¦           prompts.cpython-313.pyc
+¦           validators.cpython-313.pyc
 ¦           __init__.cpython-313.pyc
 ¦           
 +---__pycache__

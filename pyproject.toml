@@ -8,6 +8,7 @@ dependencies = [
     "beautifulsoup4>=4.15.0",
     "google-adk>=2.3.0",
     "lxml>=6.1.1",
+    "nest-asyncio>=1.6.0",
     "pdfplumber>=0.11.10",
     "pypdf2>=3.0.1",
     "python-dotenv>=1.2.2",

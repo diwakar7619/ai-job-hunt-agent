@@ -22,19 +22,16 @@ from agents.agent import (
 # ==========================================================
 # Individual Agent Imports
 # ==========================================================
-
 from agents.jd_analyzer import jd_analyzer
 from agents.resume_analyzer import resume_analyzer
 from agents.recommendation import recommendation_agent
 from agents.outreach_writer import outreach_writer
-
-# ==========================================================
-# Public Exports
-# ==========================================================
+from agents.quality_checker import quality_checker
 
 __all__ = [
     "jd_analyzer",
     "resume_analyzer",
     "recommendation_agent",
+    "quality_checker",
     "outreach_writer",
 ]

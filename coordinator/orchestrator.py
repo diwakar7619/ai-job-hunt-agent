@@ -17,7 +17,6 @@ Dependencies: google.adk, google.genai, dotenv, internal agents and utilities.
 
 from dotenv import load_dotenv
 
-load_dotenv()
 
 # ==========================================================
 # Standard Library Imports
@@ -26,6 +25,7 @@ load_dotenv()
 import asyncio
 import json
 import uuid
+import nest_asyncio
 from typing import Any
 
 # ==========================================================
@@ -45,6 +45,7 @@ from agents.agent import (
     outreach_writer,
     recommendation_agent,
     resume_analyzer,
+    quality_checker,
 )
 from utils.constants import (
     APP_NAME,
@@ -52,6 +53,7 @@ from utils.constants import (
     OUTREACH_KEY,
     RECOMMENDATION_KEY,
     RESUME_ANALYSIS_KEY,
+    QUALITY_CHECK_KEY,
 )
 from utils.helper import clean_text, truncate_resume
 from utils.logger import (
@@ -62,6 +64,8 @@ from utils.logger import (
 )
 from utils.parser import parse_json_safe
 
+
+load_dotenv()
 # ==========================================================
 # Module Constants
 # ==========================================================
@@ -139,16 +143,18 @@ async def _run_agent(
     # ----------------------------------------------------------
     # Stream the async generator to completion to ensure full state writes.
     try:
-        async for _event in runner.run_async(
+        async for event in runner.run_async(
             user_id=USER_ID,
             session_id=session.id,
             new_message=message,
         ):
-            pass
+            print(event)
 
     except Exception as error:
-        log_error(agent.name, error)
-        raise RuntimeError(f"{agent.name} failed during execution.") from error
+        import traceback
+
+        traceback.print_exc()
+        raise
 
     # ----------------------------------------------------------
     # Retrieve Session State
@@ -220,7 +226,7 @@ def _run_async_safe(coro: Any) -> Any:
 
 
 async def _pipeline(job_description: str, resume_text: str) -> PipelineResult:
-    """Execute the full four-stage agent pipeline asynchronously.
+    """Execute the full five-stage agent pipeline asynchronously.
 
     Normalizes inputs, then runs each agent in sequence, injecting prior
     outputs into each subsequent agent's prompt as structured JSON context.
@@ -232,7 +238,7 @@ async def _pipeline(job_description: str, resume_text: str) -> PipelineResult:
     Returns:
         A ``PipelineResult`` dict with keys:
         ``jd_analysis``, ``resume_analysis``,
-        ``recommendation_analysis``, ``outreach_output``.
+        ``recommendation_analysis``, ``quality_check``, ``outreach_output``.
     """
     job_description = clean_text(job_description)
     resume_text = truncate_resume(clean_text(resume_text))
@@ -288,6 +294,32 @@ async def _pipeline(job_description: str, resume_text: str) -> PipelineResult:
     )
 
     # ==========================================================
+    # Stage 3.5 — Quality Check
+    # ==========================================================
+    quality_prompt = (
+        f"JD Analysis:\n"
+        f"{json.dumps(jd_result, indent=2, ensure_ascii=False)}\n\n"
+        f"Resume Analysis:\n"
+        f"{json.dumps(resume_result, indent=2, ensure_ascii=False)}\n\n"
+        f"Recommendations:\n"
+        f"{json.dumps(rec_result, indent=2, ensure_ascii=False)}\n\n"
+        f"Evaluate the analysis and recommendations based on:\n"
+        f"- consistency\n"
+        f"- completeness\n"
+        f"- ATS relevance\n"
+        f"- unsupported claims\n"
+        f"- actionability\n\n"
+        f"Return JSON only."
+    )
+
+    quality_result = await _run_agent(
+        agent=quality_checker,
+        prompt=quality_prompt,
+        app_name=APP_NAME,
+        output_key=QUALITY_CHECK_KEY,
+    )
+
+    # ==========================================================
     # Stage 4 — Outreach Writing
     # ==========================================================
     # Draft tailored communications leveraging all prior contextual analysis.
@@ -298,7 +330,10 @@ async def _pipeline(job_description: str, resume_text: str) -> PipelineResult:
         f"{json.dumps(resume_result, indent=2, ensure_ascii=False)}\n\n"
         f"Recommendations:\n"
         f"{json.dumps(rec_result, indent=2, ensure_ascii=False)}\n\n"
-        f"Write a personalized cover letter and application email."
+        f"Quality Review:\n"
+        f"{json.dumps(quality_result, indent=2, ensure_ascii=False)}\n\n"
+        f"Write a personalized cover letter and application email.\n"
+        f"If 'approved' == false in the Quality Review, explicitly revise the cover letter and email using the quality suggestions before generating the final output. Otherwise, generate normally."
     )
 
     outreach_result = await _run_agent(
@@ -312,6 +347,7 @@ async def _pipeline(job_description: str, resume_text: str) -> PipelineResult:
         JD_ANALYSIS_KEY: jd_result,
         RESUME_ANALYSIS_KEY: resume_result,
         RECOMMENDATION_KEY: rec_result,
+        QUALITY_CHECK_KEY: quality_result,
         OUTREACH_KEY: outreach_result,
     }
 
@@ -322,7 +358,7 @@ async def _pipeline(job_description: str, resume_text: str) -> PipelineResult:
 
 
 class JobHuntOrchestrator:
-    """Coordinates the four-stage AI job hunt pipeline.
+    """Coordinates the five-stage AI job hunt pipeline.
 
     Provides a synchronous ``run()`` entry point safe for use from
     Streamlit, and a ``get_pipeline()`` helper for introspection and
@@ -342,6 +378,7 @@ class JobHuntOrchestrator:
             jd_analyzer,
             resume_analyzer,
             recommendation_agent,
+            quality_checker,
             outreach_writer,
         ]
 
@@ -360,7 +397,7 @@ class JobHuntOrchestrator:
         Returns:
             A ``PipelineResult`` dict with keys:
             ``jd_analysis``, ``resume_analysis``,
-            ``recommendation_analysis``, ``outreach_output``.
+            ``recommendation_analysis``, ``quality_check``, ``outreach_output``.
 
         Raises:
             RuntimeError: Propagated from any agent stage that fails,

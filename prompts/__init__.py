@@ -11,6 +11,7 @@ from .jd_prompt import get_jd_prompt
 from .resume_prompt import get_resume_prompt
 from .recommendation_prompt import get_recommendation_prompt
 from .outreach_prompt import get_outreach_prompt
+from .quality_prompt import get_quality_prompt
 
 __all__ = [
     "get_jd_prompt",
@@ -18,3 +19,6 @@ __all__ = [
     "get_recommendation_prompt",
     "get_outreach_prompt",
 ]
+
+
+__all__ = [..., "get_quality_prompt"]

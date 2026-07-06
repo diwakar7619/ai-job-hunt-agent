@@ -42,7 +42,8 @@ JSON SCHEMA
     "strengths":[],
     "weaknesses":[],
     "experience_match":"",
-    "overall_fit":""
+    "overall_fit":"",
+    "application_score": 0
 }
 
 RULES
@@ -61,6 +62,14 @@ Must be supported by resume evidence.
 
 overall_fit:
 One concise paragraph.
+
+application_score:
+Integer 0-100. Compute as follows:
+- Skill match: (matched_skills count / total required_skills count) * 45
+- Experience match: High=30, Medium=15, Low=5
+- Strengths depth: count of strengths * 2 (max 15)
+- Penalty: missing critical skills -2 each (max -20)
+Round to nearest integer. Minimum 0, maximum 100.
 
 Never fabricate candidate qualifications.
 """

@@ -18,6 +18,7 @@ RECOMMENDATION_KEY = "recommendation_analysis"
 
 OUTREACH_KEY = "outreach_output"
 
+QUALITY_CHECK_KEY = "quality_check"
 # ==========================================================
 # UI
 # ==========================================================
