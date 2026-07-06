@@ -36,41 +36,50 @@ Built as part of the **Kaggle Google AI Agents Vibe Coding Capstone**, the proje
 
 # 🎥 Demo
 
-## Home
+# 🎥 Demo
 
-> *(Insert Homepage Screenshot Here)*
+### Home
 
----
-
-## Candidate Dashboard
-
-> *(Insert Dashboard Screenshot Here)*
+![Homepage](assets/01-homepage.png)
 
 ---
 
-## Resume Analysis
+### Candidate Match Dashboard
 
-> *(Insert Resume Analysis Screenshot Here)*
-
----
-
-## Recommendations
-
-> *(Insert Recommendations Screenshot Here)*
+![Dashboard](assets/02-candidate-dashboard.png)
 
 ---
 
-## Outreach Generation
+### Agent Execution Timeline
 
-> *(Insert Outreach Screenshot Here)*
+![Timeline](assets/03-agent-execution-timeline.png)
+
+---
+
+### Job Description Analysis
+
+![JD Analysis](assets/04-job-description-analysis.png)
 
 ---
 
-## Agent Execution Timeline
+### Resume Match Analysis
 
-> *(Insert Timeline Screenshot Here)*
+![Resume Analysis](assets/05-resume-match-analysis.png)
 
 ---
+
+### Recommendations Engine
+
+![Recommendations](assets/06-recommendations-engine.png)
+
+---
+
+### Outreach Generator
+
+![Outreach](assets/07-outreach-generator.png)
+
+---
+
 
 # ❓ Problem Statement
 
